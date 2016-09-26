@@ -1,0 +1,10 @@
+---
+- hosts: all
+  user: root
+  vars:
+    - set_forks: "{{ SET_FORKS }}"
+    - num_hosts: "{{ groups['forktest'] | length }}"
+  tasks:
+    - name: set number of forks 
+      lineinfile: dest=/home/nelluri/ansible.cfg regexp=^forks line=forks={{ num_hosts }}
+      connection: local
