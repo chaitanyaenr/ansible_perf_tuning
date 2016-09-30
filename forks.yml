@@ -17,3 +17,12 @@
           callback_whitelist = profile_tasks
       connection: local
       when: inventory_path is defined and set_profiling == "yes"
+    - name: Enable pipelining for rhel > 6 and other distributions
+      blockinfile:
+        dest: {{ inventory_path }}
+        insertafter: "#pipelining = False"
+        content: |
+          pipeling = True
+     when: (ansible_os_family == "RedHat" and ansible_lsb.major_release|int > 6) or (ansible_distribution == "CentOS") or (ansible_distribution == "Debian") or (ansible_distribution == "Fedora")
+     connection: local
+     
