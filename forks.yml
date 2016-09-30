@@ -22,7 +22,6 @@
         dest: {{ inventory_path }}
         insertafter: "#pipelining = False"
         content: |
-          pipeling = True
-     when: (ansible_os_family == "RedHat" and ansible_lsb.major_release|int > 6) or (ansible_distribution == "CentOS") or (ansible_distribution == "Debian") or (ansible_distribution == "Fedora")
-     connection: local
-     
+          pipelining = True
+      when: (ansible_os_family == "RedHat" and ansible_lsb.major_release|int > 6) or (ansible_distribution == "CentOS") or (ansible_distribution == "Debian") or (ansible_distribution == "Fedora")
+      connection: local 
