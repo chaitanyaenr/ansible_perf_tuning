@@ -19,7 +19,7 @@ $ ansible-playbook -i hosts forks.yml
 ```
 ### Enable profiling of tasks
 ```
-$ ansible-playbook -i hosts --extra-vars '{"INVENTORY_PATH":"/tmp/hosts", "SET_PROFILING":"yes" }'
+$ ansible-playbook -i hosts --extra-vars '{"CONFIG_PATH":"/tmp/ansible.cfg", "SET_PROFILING":"yes" }'
 ```
 ### Testing
 Ansible profile plugin can be used to findout the time taken by each task. You can enable it by adding this line to ansible.cfg
