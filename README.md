@@ -1,10 +1,13 @@
 # ansible_perf_tuning
-Tunes the performance of ansible by changing the number of forks, enables profiling of tasks 
+Tunes the performance of ansible by changing the number of forks, enable pipelining, profiling of tasks 
 
 This playbook will set the number of forks equal to number of hosts. 
 If the number of forks are more than number of hosts, there will be a penalty for each task since there will be multiple processes running
 and it will take some time to shut them down. On the other hand if the number of forks are less than the number of hosts, then each task will 
 take a lot more time since hosts configured by ansible in parallel will be less in this case.
+
+If you can use pipelining, Ansible will reduce the amount of files transferred over the wire, making everything much more efficient. 
+It is enabled automatically when yor are running RHEL > 6, Centos, Fedora.
 
 You can also choose to enable profiling of tasks.
 
