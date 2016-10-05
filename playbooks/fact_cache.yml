@@ -1,0 +1,38 @@
+---
+- hosts: all
+  user: root
+  roles:
+  - role: dochang.docker
+  vars:
+    - config_path: "{{ CONFIG_PATH }}"  
+  tasks:
+    - name: Install dependencies
+      dnf: name={{ item }} state=latest
+      with_items:
+        - python-pip
+      connection: local
+    - name: Install python client for redis
+      pip: name={{ item }}
+      with_items:
+        - redis
+        - docker-py
+      connection: local
+    - name: redis container
+      docker:
+        name: myredis
+        image: redis
+        command: redis-server --appendonly yes
+        state: started
+        expose:
+        - 6379
+      connection: local
+    - name: Enable fact_caching to redis
+      lineinfile: dest={{ config_path }}
+              line={{ item.line }}
+              insertafter={{ item.insertafter }}
+      with_items:
+       - { line: "gathering = smart", insertafter: "^#? some" }
+       - { line: "fact_caching = redis", insertafter: "^gathering" }
+       - { line: "fact_caching_timeout = 3600", insertafter: "^fact_caching" }
+       - { line: "fact_caching_connection = 127.0.0.1:6379:0", insertafter: "^fact_caching_timeout" }
+      connection: local

@@ -7,7 +7,7 @@
     - num_hosts: "{{ groups['all'] | length }}"
   tasks:
     - name: set number of forks 
-      lineinfile: dest={{ config_path }} regexp=^forks line=forks={{ num_hosts }} backrefs=yes
+      lineinfile: dest={{ config_path }} regexp=^#?forks line=forks={{ num_hosts }} backrefs=yes
       connection: local
     - name: add profiling 
       blockinfile:
