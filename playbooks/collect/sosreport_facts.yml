@@ -1,0 +1,47 @@
+---
+- hosts: remotes
+  user: root
+  vars:
+    - sosreport_path: "{{ SOSREPORT_PATH|default('/tmp') }}"
+    - tmp_dir: /var/tmp
+    - hosts_path: "{{ HOSTS_PATH|default('/etc/ansible/hosts') }}"
+  tasks:
+    - name: Install sos via dnf
+      dnf: name={{ item }} state=latest
+      with_items:
+        - sos
+        - rsync
+        - ansible
+      when: ansible_pkg_mgr == 'dnf'
+    - name: Install sos via yum
+      yum: name={{ item }} state=latest
+      with_items:
+        - sos
+        - rsync
+        - ansible
+      when: ansible_pkg_mgr == 'yum'
+    - name: Install rsync on local
+      local_action: shell dnf -y install rsync
+    - name: results directory
+      local_action: shell mkdir -p "{{ sosreport_path }}"
+    - name: register timestamp
+      action: shell date '+%F.%H:%M:%S'
+      register: mydate
+    - name: create directory to store results
+      local_action: shell mkdir -p {{ sosreport_path }}/results-{{ mydate.stdout }}/{{ ansible_hostname}}
+    - name: see that directory doesn't have any files
+      shell: cd "{{ tmp_dir }}" && /bin/rm -rf *
+    - name: Run sosreport
+      shell: sosreport -o general -o kernel -o filesys -o devicemapper -o system -o memory -o hardware -o networking -o lsbrelease -o block -o processor -o tuned --batch --quiet --tmp-dir "{{ tmp_dir }}"
+    - name: Sync the results from remotes
+      synchronize:
+          src: "{{ tmp_dir }}/"
+          dest: "{{ sosreport_path }}/results-{{ mydate.stdout }}/{{ ansible_hostname }}"
+          mode: pull
+          archive: yes
+    - name: Delete the results on remotes
+      shell: cd "{{ tmp_dir }}" && /bin/rm -rf *
+    - name: Create dir for ansible_facts
+      local_action: shell mkdir -p "{{ sosreport_path }}/results-{{ mydate.stdout }}/{{ ansible_hostname }}/ansible_facts"
+    - name: Collect ansible_facts
+      local_action: shell ansible -i {{ hosts_path }} -m setup all --tree "{{ sosreport_path }}/results-{{ mydate.stdout }}/{{ ansible_hostname }}/ansible_facts" --private-key $HOME/.ssh/id_rsa -u root
