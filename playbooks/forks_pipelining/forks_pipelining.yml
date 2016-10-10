@@ -1,0 +1,23 @@
+---
+- hosts: all
+  user: root
+  vars:
+    - config_path: "{{ CONFIG_PATH }}"
+    - set_profiling: "{{ SET_PROFILING }}"
+    - num_hosts: "{{ groups['all'] | length }}"
+  tasks:
+    - name: set number of forks 
+      lineinfile: dest={{ config_path }} regexp=^#?forks line=forks={{ num_hosts }} backrefs=yes
+      connection: local
+    - name: add profiling 
+      blockinfile:
+        dest: {{ config_path }}
+        insertafter: "# enable additional callbacks"
+        content: |
+          callback_whitelist = profile_tasks
+      connection: local
+      when: inventory_path is defined and set_profiling == "yes"
+    - name: Enable pipelining for rhel > 6 and other distributions
+      lineinfile: dest={{ config_path }} regexp=^#pipelining line=pipelining=True backrefs=yes
+      when: (ansible_os_family == "RedHat" and ansible_distribution_major_version|int > 6) or (ansible_distribution == "CentOS") or (ansible_distribution == "Debian") or (ansible_distribution == "Fedora") or (ansible_ssh_user == root)
+      connection: local
