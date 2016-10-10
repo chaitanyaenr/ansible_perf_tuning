@@ -14,13 +14,23 @@ and it will take some time to shut them down. On the other hand if the number of
 take a lot more time since hosts configured by ansible in parallel will be less in this case.
 
 If you can use pipelining, Ansible will reduce the amount of files transferred over the wire, making everything much more efficient. 
-It is enabled automatically when yor are running RHEL > 6, Centos, Fedora.
+Enabling pipelining reduces the number of SSH operations required to execute a module on the remote server. 
+Running this playbook will automatically enable pipelining when you are running RHEL > 6, Centos, Fedora.
 
-You can also choose to enable profiling of tasks.
+You can also choose to enable profiling of tasks. 
 
 ### collect/sosreport_facts.yml
 Collects sosreport, ansible_facts from remotes on to the local machine and deletes them on remotes. This will help in finding out
 performance bottlenecks.
+
+### ara.yml
+Installs, configures ara which makes ansible runs easier to visualize and troubleshoot. 
+You can access the dashboard at http://localhost:8080
+
+More info about ara is available on https://github.com/dmsimard/ara
+
+### Ansible recommend
+This will recommend you of ways to boost the performance by looking at your ansible.cfg
 
 ## Requirements
 You need to have these installed on your host
@@ -29,12 +39,22 @@ You need to have these installed on your host
 
 ### Run facts_cache.yml
 ```
-$ ansible-playbook -i hosts facts_cache.yml 
+$ ansible-playbook -i hosts --extra-vars  '{"CONFIG_PATH":"/PATH/TO/ANSIBLE.CONFIG"}' facts_cache.yml 
 ```
 
 ### Run forks_pipelining.yml playbook
 ```
-$ ansible-playbook -i hosts forks_pipelining.yml
+$ ansible-playbook -i hosts --extra-vars '{"CONFIG_PATH":"/PATH/TO/ANSIBLE.CONFIG"}' forks_pipelining.yml
+```
+
+### Ansible recommend
+```
+$ python ansible_recommend.py /path/to/your/ansible.cfg
+```
+
+### Run ara.yml
+```
+$ ansible-playbook -i hosts --extra-vars '{"CONFIG_PATH":"/PATH/TO/ANSIBLE.CONFIG"}' ara.yml
 ```
 
 ### Run sosreport_facts.yml
@@ -111,4 +131,52 @@ $ ansible-playbook -i hosts --extra-vars '{"CONFIG_PATH":"/tmp/ansible.cfg", "SE
 Ansible profile plugin can be used to findout the time taken by each task. You can enable it by adding this line to ansible.cfg
 callback_whitelist = profile_tasks
 
+You can set export ANSIBLE_DEBUG = 1 in your environment. This will generate verbose output, you will be able to see the timing 
+of internal commands.
+
 Profiling tasks will also help in identifying which steps are slow.
+
+### Files
+
+├── graphs
+│   └── ansible_cache
+│       ├── ansible_cache.py
+│       └── cacheVSno-cache.png
+├── hosts
+├── playbooks
+│   ├── ara
+│   │   ├── ara.yml
+│   │   ├── containerized_ara.yml
+│   │   └── README.md
+│   ├── collect
+│   │   ├── README.md
+│   │   └── sosreport_facts.yml
+│   ├── facts_cache.yml
+│   └── forks_pipelining.yml
+├── README.md
+└── roles
+    └── dochang.docker
+        ├── CHANGELOG.md
+        ├── defaults
+        │   └── main.yml
+        ├── LICENSE
+        ├── meta
+        │   └── main.yml
+        ├── README.md
+        ├── tasks
+        │   ├── installer
+        │   │   ├── default.yml
+        │   │   └── pacman.yml
+        │   ├── install.yml
+        │   └── main.yml
+        ├── tests
+        │   ├── inventory
+        │   └── test.yml
+        └── vars
+            ├── installer
+            │   ├── Archlinux.yml
+            │   └── default.yml
+            └── main.yml
+
+
+
