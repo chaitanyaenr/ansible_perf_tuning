@@ -138,6 +138,7 @@ Profiling tasks will also help in identifying which steps are slow.
 
 ### Files
 
+```
 ├── graphs
 │   └── ansible_cache
 │       ├── ansible_cache.py
@@ -177,6 +178,4 @@ Profiling tasks will also help in identifying which steps are slow.
             │   ├── Archlinux.yml
             │   └── default.yml
             └── main.yml
-
-
-
+```
