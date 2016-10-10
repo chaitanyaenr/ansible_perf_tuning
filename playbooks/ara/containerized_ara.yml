@@ -1,0 +1,22 @@
+---
+- hosts: ansible_controller
+  user: root
+  vars:
+    - config_path: "{{ CONFIG_PATH }}"
+  tasks:
+    - name: ara container
+      docker:
+        name: ara
+        image: nael4746/ara
+        state: started
+        expose:
+        - 8080
+        ports:
+         - "127.0.0.1:8080:8080"
+    - name: Enable ara plugin
+      lineinfile: dest=/root/ansible.cfg
+      line={{ item.line }}
+      insertafter={{ item.insertafter }}
+      with_items:
+       - { line: "callback_plugins = /usr/lib/python2.7/site-packages/ara/callback:$VIRTUAL_ENV/lib/python2.7/site-packages/ara/callback:/usr/local/lib/python2.7/dist-packages/ara/callback", insertafter: "^#? some" }
+      connection: local

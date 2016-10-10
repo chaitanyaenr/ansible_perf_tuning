@@ -1,0 +1,36 @@
+---
+- hosts: ansible_controller
+  user: root
+  vars:
+    - config_path: "{{ CONFIG_PATH }}"
+  tasks:
+    - name: Install dependencies
+      dnf: name={{ item }} state=latest
+      with_items:
+        - python-pip
+        - gcc
+        - python-devel
+        - libffi-devel
+        - openssl-devel
+        - redhat-rpm-config
+        - python-setuptools
+        - tree
+        - libselinux-python
+      connection: local
+    - name: Install python client for redis
+      pip: name={{ item }}
+      with_items:
+        - ara
+        - docker-py
+        - tox
+      connection: local
+    - name: Enable
+      lineinfile: dest=/root/ansible.cfg
+              line={{ item.line }}
+              insertafter={{ item.insertafter }}
+      with_items:
+       - { line: "callback_plugins = /usr/lib/python2.7/site-packages/ara/callback:$VIRTUAL_ENV/lib/python2.7/site-packages/ara/callback:/usr/local/lib/python2.7/dist-packages/ara/callback", insertafter: "^#? some" }
+      connection: local
+    - name: Run ara web server
+      shell: ara-manager runserver -h localhost -p 8080
+      connection: local
