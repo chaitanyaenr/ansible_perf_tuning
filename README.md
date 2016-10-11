@@ -139,6 +139,10 @@ Profiling tasks will also help in identifying which steps are slow.
 ### Files
 
 ```
+.
+├── ansible_recommend
+│   ├── ansible_recommend.py
+│   └── README.md
 ├── graphs
 │   └── ansible_cache
 │       ├── ansible_cache.py
@@ -152,10 +156,29 @@ Profiling tasks will also help in identifying which steps are slow.
 │   ├── collect
 │   │   ├── README.md
 │   │   └── sosreport_facts.yml
-│   ├── facts_cache.yml
-│   └── forks_pipelining.yml
+│   ├── facts_cache
+│   │   └── facts_cache.yml
+│   └── forks_pipelining
+│       └── forks_pipelining.yml
 ├── README.md
 └── roles
+    ├── andrewrothstein.elasticsearch
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── handlers
+    │   │   └── main.yml
+    │   ├── LICENSE
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── README.md
+    │   ├── requirements.yml
+    │   ├── tasks
+    │   │   └── main.yml
+    │   ├── test.yml
+    │   └── vars
+    │       ├── Debian.yml
+    │       ├── main.yml
+    │       └── RedHat.yml
     └── dochang.docker
         ├── CHANGELOG.md
         ├── defaults
@@ -178,4 +201,5 @@ Profiling tasks will also help in identifying which steps are slow.
             │   ├── Archlinux.yml
             │   └── default.yml
             └── main.yml
+
 ```
