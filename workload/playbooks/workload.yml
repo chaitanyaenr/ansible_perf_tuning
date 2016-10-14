@@ -1,0 +1,69 @@
+---
+- hosts: pipelining_hosts
+  user: root
+  roles:
+  - role: dochang.docker
+  tasks:
+    - name: Install dependencies
+      dnf: name={{ item }} state=latest
+      with_items:
+        - python-pip
+        - python2-dnf
+    - name: Install python client for redis
+      pip: name={{ item }}
+      with_items:
+        - redis
+        - docker-py
+    - name: redis container 1
+      docker:
+        name: myredis1
+        image: redis
+        command: redis-server --appendonly yes
+        state: started
+        expose:
+        - 6379
+    - name: redis container 2
+      docker:
+        name: myredis2
+        image: redis
+        command: redis-server --appendonly yes
+        state: started
+        expose:
+        - 6379
+    - name: redis container 3
+      docker:
+        name: myredis3
+        image: redis
+        command: redis-server --appendonly yes
+        state: started
+        expose:
+        - 6379
+    - name: redis container 4
+      docker:
+        name: myredis4
+        image: redis
+        command: redis-server --appendonly yes
+        state: started
+        expose:
+        - 6379
+    - name: delete container 1
+      docker:
+        name: myredis1
+        image: redis
+        state: absent
+    - name: delete container 2
+      docker:
+        name: myredis2
+        image: redis
+        state: absent
+    - name: delete container 3
+      docker:
+        name: myredis3
+        image: redis
+        state: absent
+    - name: delete container 4
+      docker:
+        name: myredis4
+        image: redis
+        state: absent
+
