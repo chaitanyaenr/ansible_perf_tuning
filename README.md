@@ -37,6 +37,11 @@ You need to have these installed on your host
    - Ansible
    - python
 
+### Installing roles
+```
+$ ansible-galaxy install name-of-the-role
+```
+
 ### Run facts_cache.yml
 ```
 $ ansible-playbook -i hosts --extra-vars  '{"CONFIG_PATH":"/PATH/TO/ANSIBLE.CONFIG"}' facts_cache.yml 
@@ -138,15 +143,16 @@ Profiling tasks will also help in identifying which steps are slow.
 
 ### Files
 
-```
-.
-├── ansible_recommend
+``nsible_recommend
 │   ├── ansible_recommend.py
 │   └── README.md
 ├── graphs
-│   └── ansible_cache
-│       ├── ansible_cache.py
-│       └── cacheVSno-cache.png
+│   ├── ansible_cache
+│   │   ├── ansible_cache.py
+│   │   └── cacheVSno-cache.png
+│   └── ansible_pipelining
+│       ├── pipelining.png
+│       └── pipelining.py
 ├── hosts
 ├── playbooks
 │   ├── ara
@@ -161,45 +167,51 @@ Profiling tasks will also help in identifying which steps are slow.
 │   └── forks_pipelining
 │       └── forks_pipelining.yml
 ├── README.md
-└── roles
-    ├── andrewrothstein.elasticsearch
-    │   ├── defaults
-    │   │   └── main.yml
-    │   ├── handlers
-    │   │   └── main.yml
-    │   ├── LICENSE
-    │   ├── meta
-    │   │   └── main.yml
-    │   ├── README.md
-    │   ├── requirements.yml
-    │   ├── tasks
-    │   │   └── main.yml
-    │   ├── test.yml
-    │   └── vars
-    │       ├── Debian.yml
-    │       ├── main.yml
-    │       └── RedHat.yml
-    └── dochang.docker
-        ├── CHANGELOG.md
-        ├── defaults
-        │   └── main.yml
-        ├── LICENSE
-        ├── meta
-        │   └── main.yml
-        ├── README.md
-        ├── tasks
-        │   ├── installer
-        │   │   ├── default.yml
-        │   │   └── pacman.yml
-        │   ├── install.yml
-        │   └── main.yml
-        ├── tests
-        │   ├── inventory
-        │   └── test.yml
-        └── vars
-            ├── installer
-            │   ├── Archlinux.yml
-            │   └── default.yml
-            └── main.yml
-
+├── roles
+│   ├── andrewrothstein.elasticsearch
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   ├── LICENSE
+│   │   ├── meta
+│   │   │   └── main.yml
+│   │   ├── README.md
+│   │   ├── requirements.yml
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   ├── test.yml
+│   │   └── vars
+│   │       ├── Debian.yml
+│   │       ├── main.yml
+│   │       └── RedHat.yml
+│   └── dochang.docker
+│       ├── CHANGELOG.md
+│       ├── defaults
+│       │   └── main.yml
+│       ├── LICENSE
+│       ├── meta
+│       │   └── main.yml
+│       ├── README.md
+│       ├── tasks
+│       │   ├── installer
+│       │   │   ├── default.yml
+│       │   │   └── pacman.yml
+│       │   ├── install.yml
+│       │   └── main.yml
+│       ├── tests
+│       │   ├── inventory
+│       │   └── test.yml
+│       └── vars
+│           ├── installer
+│           │   ├── Archlinux.yml
+│           │   └── default.yml
+│           └── main.yml
+├── visualize
+│   ├── main.yml
+│   └── templates
+│       └── httpd.conf.j2
+└── workload
+    └── playbooks
+        └── workload.yml
 ```
