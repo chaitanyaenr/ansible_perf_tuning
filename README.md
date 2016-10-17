@@ -23,6 +23,13 @@ You can also choose to enable profiling of tasks.
 Collects sosreport, ansible_facts from remotes on to the local machine and deletes them on remotes. This will help in finding out
 performance bottlenecks.
 
+You can choose to visulaize the ansible_facts. visualization/main.yml will configure http server to render a static html page showing the 
+parsed ansible_facts. You can access it at http://localhost/view.html
+
+### visualization/main.yml
+This playbook will configure http server to render a static html page showing the parsed ansible_facts.
+You can use playbooks/colect/sosreport_facts.yml to collect facts, generate sosreport.
+
 ### ara.yml
 Installs, configures ara which makes ansible runs easier to visualize and troubleshoot. 
 You can access the dashboard at http://localhost:8080
@@ -56,7 +63,10 @@ $ ansible-playbook -i hosts --extra-vars '{"CONFIG_PATH":"/PATH/TO/ANSIBLE.CONFI
 ```
 $ python ansible_recommend.py /path/to/your/ansible.cfg
 ```
-
+### Run visualizations/main.yml
+```
+$ ansible-playbook -i hosts --extra-vars '{"RESULTS_PATH": "/path/to/your/collected_facts"}'
+```
 ### Run ara.yml
 ```
 $ ansible-playbook -i hosts --extra-vars '{"CONFIG_PATH":"/PATH/TO/ANSIBLE.CONFIG"}' ara.yml
@@ -143,7 +153,8 @@ Profiling tasks will also help in identifying which steps are slow.
 
 ### Files
 
-``nsible_recommend
+```
+ansible_recommend
 │   ├── ansible_recommend.py
 │   └── README.md
 ├── graphs
