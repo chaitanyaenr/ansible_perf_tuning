@@ -1,0 +1,29 @@
+---
+- hosts: webserver
+  user: root
+  vars:
+    - results_path: "{{ RESULTS_PATH|default('/tmp/results') }}"
+  tasks:
+    - name: Install httpd via dnf
+      dnf: name={{ item }} state=latest
+      with_items:
+        - httpd
+        - git
+      when: ansible_pkg_mgr == 'dnf'
+    - name: Install httpd via yum
+      yum: name={{ item }} state=latest
+      with_items:
+        - httpd
+        - git
+      when: ansible_pkg_mgr == 'yum'
+    - name: Configure httpd
+      template: src=templates/httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf owner=root group=root mode=0644
+    - name: Install ansible-cmdb
+      shell: git clone https://github.com/fboender/ansible-cmdb.git && cd ansible-cmdb && make install
+      ignore_errors: yes
+    - name: Generate html
+      shell: ansible-cmdb {{ results_path }} >> /tmp/view.html
+    - name: render the html
+      copy: src=/tmp/view.html  dest=/var/www/html owner=root group=root mode=0644
+    - name: start httpd service
+      service: name=httpd state=started
