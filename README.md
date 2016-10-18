@@ -36,6 +36,11 @@ You can access the dashboard at http://localhost:8080
 
 More info about ara is available on https://github.com/dmsimard/ara
 
+### graphs
+You can find sample graphs showing how the performance has improved by enabling the above features.
+For example, the following graph shows the time taken to run the tasks before and after the tuning:
+![alt text](graphs/ansible_all_tuned/tuned.png)
+
 ### Ansible recommend
 This will recommend you of ways to boost the performance by looking at your ansible.cfg
 
@@ -154,10 +159,12 @@ Profiling tasks will also help in identifying which steps are slow.
 ### Files
 
 ```
-ansible_recommend
+├── ansible_recommend
 │   ├── ansible_recommend.py
 │   └── README.md
 ├── graphs
+│   ├── ansible_all_tuned
+│   │   └── tuned.png
 │   ├── ansible_cache
 │   │   ├── ansible_cache.py
 │   │   └── cacheVSno-cache.png
@@ -218,11 +225,12 @@ ansible_recommend
 │           │   ├── Archlinux.yml
 │           │   └── default.yml
 │           └── main.yml
-├── visualize
+├── visualization
 │   ├── main.yml
+│   ├── README.md
 │   └── templates
 │       └── httpd.conf.j2
 └── workload
-    └── playbooks
-        └── workload.yml
+    ├── playbooks
+    │   └── workload
 ```
