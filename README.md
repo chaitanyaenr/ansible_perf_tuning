@@ -1,5 +1,6 @@
 # ansible_perf_tuning
 Tunes the performance of ansible by changing the number of forks, by enabling pipelining, profiling of tasks and by caching facts to a redis container
+You can also choose to collect sosreports, facts by running collect/sosreport_facts.yml playbook and then visualize them using visualization/main.yml
 
 ### facts_cache.yml
 Ansible first uses setup module to gather facts about all the hosts involved and deletes them after each run which consumes time, instead
