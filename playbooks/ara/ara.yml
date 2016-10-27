@@ -3,6 +3,7 @@
   user: root
   vars:
     - config_path: "{{ CONFIG_PATH }}"
+    - host: "{{ HOST }}"
   tasks:
     - name: Install dependencies
       dnf: name={{ item }} state=latest
@@ -21,7 +22,6 @@
       pip: name={{ item }}
       with_items:
         - ara
-        - docker-py
         - tox
       connection: local
     - name: Enable
@@ -32,5 +32,5 @@
        - { line: "callback_plugins = /usr/lib/python2.7/site-packages/ara/callback:$VIRTUAL_ENV/lib/python2.7/site-packages/ara/callback:/usr/local/lib/python2.7/dist-packages/ara/callback", insertafter: "^#? some" }
       connection: local
     - name: Run ara web server
-      shell: ara-manager runserver -h localhost -p 8080
+      shell: ara-manager runserver -h {{ host }} -p 8080
       connection: local
