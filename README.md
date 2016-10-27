@@ -3,6 +3,12 @@ Tunes the performance of ansible by changing the number of forks, by enabling pi
 
 You can also choose to collect sosreports, facts by running collect/sosreport_facts.yml playbook and then visualize them using visualization/main.yml
 
+### Ansible version 
+$ ansible --version
+ansible 2.1.1.0
+
+Ansible-1.5 or later works fine.
+
 ### facts_cache.yml
 Ansible first uses setup module to gather facts about all the hosts involved and deletes them after each run which consumes time, instead
 this playbook will install docker, start redis container i.e enable caching of facts to a redis container running on the controller machine
