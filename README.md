@@ -5,6 +5,7 @@ You can also choose to collect sosreports, facts by running collect/sosreport_fa
 
 ### Ansible version 
 $ ansible --version
+
 ansible 2.1.1.0
 
 Ansible-1.5 or later works fine.
