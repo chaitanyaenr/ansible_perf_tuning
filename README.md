@@ -46,9 +46,9 @@ You can access the dashboard at http://localhost:8080
 More info about ara is available on https://github.com/dmsimard/ara
 
 ### graphs
-You can find sample graphs showing how the performance has improved by enabling the above features.
+You can find sample graphs showing how the performance has improved by enabling above features.
 For example, the following graph shows the time taken to run the tasks before and after the tuning:
-![alt text](graphs/ansible_all_tuned/tuned.png)
+![alt text](graphs/rhel/RHEL_7.2.png)
 
 ### Ansible recommend
 This will recommend you of ways to boost the performance by looking at your ansible.cfg
