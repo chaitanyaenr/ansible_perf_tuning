@@ -1,16 +1,17 @@
 ---
-- hosts: ansible_controller
+- hosts: all
   user: root
   vars:
     - config_path: "{{ CONFIG_PATH }}"
     - host: "{{ HOST }}"
     - port: "{{ PORT|default('8080') }}"
   tasks:
-    - name: Install dependencies
+    - name: Install dependencies via dnf
       dnf: name={{ item }} state=latest
       with_items:
         - python-pip
         - gcc
+        - ansible
         - python-devel
         - libffi-devel
         - openssl-devel
@@ -18,12 +19,24 @@
         - python-setuptools
         - tree
         - libselinux-python
+      when: ansible_pkg_mgr == 'dnf'
+    - name: Install dependencies via yum
+      yum: name={{ item }} state=latest
+      with_items:
+        - gcc 
+        - python-devel 
+        - libffi-devel 
+        - openssl-devel 
+        - redhat-rpm-config
+      when: ansible_pkg_mgr == 'yum'
+    - name: Install pip
+      easy_install: name=pip state=latest
     - name: Install ara
       pip: name={{ item }}
       with_items:
         - ara
         - tox
-    - name: Enable
+    - name: Enable ara plugin
       lineinfile: dest={{ config_path }}
               line={{ item.line }}
               insertafter={{ item.insertafter }}
