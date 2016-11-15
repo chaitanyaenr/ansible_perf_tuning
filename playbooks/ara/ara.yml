@@ -2,7 +2,7 @@
 - hosts: all
   user: root
   vars:
-    - config_path: "{{ CONFIG_PATH }}"
+    - config_path: "{{ CONFIG_PATH|default('/etc/ansible/ansible.cfg') }}"
     - host: "{{ HOST }}"
     - port: "{{ PORT|default('8080') }}"
   tasks:
